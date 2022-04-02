@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
+<link rel="stylesheet" href="{% static 'css/home/home.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="">
+    
+    <div id="splide" class="splide">
+        <div class="splide__track">
+            <ul class="splide__list">
+            {% for item in page.gallery_images.all %}
+                <a {% if item.link %}href="{{ item.link }}" target="_blank"{%endif %} class="splide__slide">
+                    {% image item.image width-1920 %}
+                    {% if item.caption %}
+                    <p>{{ item.caption|richtext }}</p>
+                    {% endif %}
+                </a>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="splide__progress">
+            <div class="splide__progress__bar">
+            </div>
+        </div>
+    </div>
+
+    <section>
+        <!-- Widget Circle -->
+        <div class="w-full bg-gray-50">
+            {% with boxes=page.icon_boxes.all %}
+                {% include 'widgets/icon_boxes_widget.html' %}
+            {% endwith %}
+        </div>
+        <!-- /Widget Circle -->
+
+        <!-- Alert Widget -->
+        <div class="w-full py-8 bg-white">
+            <div class="mx-auto flex flex-row items-center justify-center font-bold">
+                <h2 class="m-0 hidden">Derniers messages</h2>
+                <h2 class="m-0">Dernières alertes</h2>
+                <a href="#" class="mx-2 hidden">
+                    · voir plus ·
+                </a>
+            </div>
+
+            {% with alerts=page.alerts %}
+                {% include 'widgets/alerts_widget.html' %}
+            {% endwith %}
+        </div>
+        <!-- /Alert Widget -->
+    </section>
+</div>
+
+
+
+{% endblock content %}
+
+{% block extra_js %}
+<script src="/static/vendor/splide/splide.min.js"></script>
+<script>
+    window.onload = function () {
+        var splide = new Splide('#splide', {
+            type: 'loop',
+            autoplay: true,
+            lazyLoad: true,
+            pauseOnHover: true,
+            pauseOnFocus: true,
+            heightRatio: 0.5,
+        });
+
+        splide.mount();
+
+        // Enable top menu dropdowns
+        // $('.dropdown').dropdown({transition: 'drop', on: 'hover' });
+    }
+</script>
+{% endblock extra_js %}

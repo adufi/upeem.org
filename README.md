@@ -10,16 +10,19 @@ Pour l'installation vous aurez besoin de virtualenv ou venv.
 ```bash
 virtualenv venv
 source venv/bin/activate
-pip install -r requirements
+pip install -r requirements.txt
 ```
+NOTE: Sur MacOS j'ai eu des soucis avec cairo, pillow et psycopg2. Psycopg2 peut s'installer avec pip de nouveau. Cairo et pillow avec brew.
 
 Une fois l'installation du virtualenv terminé, il faut préparer le script pour les variables d'environnements.
+
+Le site tourne initialement sur du PostgreSQL, mais devrait fonctionner également sur du SQLite.
 
 ```bash
 touch scripts/.var.env.sh
 ```
 
-TRES IMPORTANT: les fichiers finnissants en '.env.sh' ne seront pas synchronisés pour des questions de sécurité.
+TRES IMPORTANT: les fichiers finissants en '.env.sh' ne seront pas synchronisés pour des questions de sécurité.
 
 Pour la [secret key...](https://djecrety.ir/).
 
@@ -50,4 +53,14 @@ export ROOT_URLCONF="project.urls"
 export DJANGO_SETTINGS_MODULE="project.settings.dev"
 
 export ALLOWED_HOSTS="localhost 127.0.0.1 192.168.1.XXX"
+```
+
+## Usage
+
+Veillez à être dans l'environnement, puis à compiler les varibles.
+
+```bash
+python project/manage.py migrate
+python project/manage.py createsuperuser
+python project/manage.py runserver 0.0.0.0:8000
 ```
